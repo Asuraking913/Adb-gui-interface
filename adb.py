@@ -27,7 +27,6 @@ else:
 def run_adb():
     # return system(f"adb connect {phone_ip}:9999")
     system("adb connect 192.168.43.1:9999")
-    return False
 
 
 def run_scrcpy():
@@ -35,13 +34,13 @@ def run_scrcpy():
         
 def run_tcpip():
     system("adb tcpip 9999")
-    return False
 
 layout = [
         [sg.VPush()],
      [sg.Push(),sg.Text('Welcome to Phone Controller'), sg.Push()],
      [sg.VPush()],
-     [sg.Push(), sg.Button('Connect to Phone', size = (10, 2), font=('young 15 bold'), key='connect'), sg.Button('PORT', key='port',visible=False ,size = (10, 2), font=('young 15 bold')), sg.Push()]
+     [sg.Push(), sg.Button('PORT 2', key='port' ,size = (10, 2), font=('young 10 bold')), sg.Push()],
+     [sg.Button('View Phone 3', size = (10, 2), font=('young 10 bold'), key='view'), sg.Button('Connect to Phone 1', size = (10, 2), font=('young 10 bold'), key='connect')]
      ]
         
 window = sg.Window('Phone Controller', layout, size=(300, 300), font=('young 12'))
@@ -56,19 +55,13 @@ while True:
         break
     
     if event == 'connect':
-        if connected == False:
-            connected = run_adb()
-        else:
-            sg.popup("""Please plug your phone to your \n computer through a usb cord.\n Please ensure you have Developer \n settings enabled on your phone""")
-            window['connect'].update(visible=False)
-            window['port'].update(visible = True)
+        run_adb()
+    
+    if event == 'view':
+        run_scrcpy()
     
     if event == 'port':
-        if run_tcpip():
-            success = True
-        else:
-            sg.popup("""Connect your phone to your computer through a USB cord and click PORT""")
-        
+        run_scrcpy
 
 window.close()
 
